@@ -3,10 +3,12 @@
 import Vue from 'vue'
 import App from './App'
 import router from './router'
+import fetch from '@/api/'
 
 import 'normalize.css'
 import './assets/css/reset.css'
 
+Vue.prototype.$fetch = fetch
 Vue.config.productionTip = false
 
 /* eslint-disable no-new */

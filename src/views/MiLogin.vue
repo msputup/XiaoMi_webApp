@@ -92,7 +92,6 @@
 </template>
 
 <script>
-import axios from 'axios'
 import md5 from 'blueimp-md5'
 
 export default {
@@ -135,8 +134,8 @@ export default {
         this.errMsg = '手机号格式不正确'
         return
       }
-      let url = 'http://rap2api.taobao.org/app/mock/13801/user/getCode'
-      axios.post(url, {username: this.username}).then(res => {
+
+      this.$fetch('getCode', {username: this.username}).then(res => {
         this.timer = setInterval(() => {
           this.codeMsg = `重新发送${this.timedown}`
           this.timedown--
@@ -180,7 +179,6 @@ export default {
       // 如果isLoading=true，说明还在加载
       if (this.isLoading) return
       this.isLoading = true
-      let url = 'http://rap2api.taobao.org/app/mock/25079/user/login'
       let data = {
         username: this.username
       }
@@ -190,12 +188,12 @@ export default {
         data.pwd = md5(this.password)
       }
 
-      axios.post(url, data).then(res => {
-        let status = res.data.status
+      this.$fetch('login', data).then(res => {
+        let status = res.status
         if (status === 200) {
           alert('登录成功，要跳转')
         } else {
-          this.errMsg = res.data.message
+          this.errMsg = res.message
         }
         this.isLoading = false
       }).catch(err => {
