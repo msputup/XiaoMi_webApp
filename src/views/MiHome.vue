@@ -33,7 +33,7 @@
               <div class="nav-item swiper-slide"
                 :class="{'nav_active':curIndex == index}"
                 v-for="(nav,index) in navList"
-                :key='nav.page_id'
+                :key="index"
                 @click="changeIndex(index)">
                 <span>{{nav.name}}</span>
               </div>
@@ -41,8 +41,15 @@
           </div>
         </header>
         <div class="page-wrap">
-          <div class="bodys">
-            bodys内容
+          <div class="bodys" v-for="(nav,index) in navList" :key="index">
+            <!-- <div v-for = '(content, Index) in navList' v-show = 'contentIndex === homeMenuFlag'>
+              <ContentList :content-list = 'homeDataArray[contentIndex]'></ContentList>
+            </div> -->
+            <!-- v-bind:key需要放在真正的html元素上 -->
+            <!-- <template v-for="(nav,index) in navList">
+                <Content :content-list="pageContent[index]"></Content>
+            </template> -->
+              <component-list-main :sections="pageContent[index]"></component-list-main>
           </div>
         </div>
       </div>
@@ -52,27 +59,31 @@
 
 <script>
 import Swiper from 'swiper'
-
+import componentListMain from '../components/home/componentListMain'
 export default {
   data () {
     return {
-      navList: null,
+      navList: [],
       curIndex: 0,
       navSwiper: null,
-      slidesPerView: 6
+      slidesPerView: 6,
+      pageContent: {}
     }
+  },
+
+  components: {
+    componentListMain
   },
   // vue生命周期
   created () {
     this.getNavList()
   },
-  mounted () {
-    this.getHomePage()
-  },
   methods: {
     getNavList () {
-      this.$fetch('navList').then(res => {
-        this.navList = res.data.list
+      // bugs : 刷新会闪空白，需要加个loading
+      this.$fetch('homeNav').then(res => {
+        this.navList = res.data.data.tabs
+        this.getHomePage(this.curIndex)
         // 不在mounted中是因为，数据没有加载完成，swiper就初始化完成了， 会导致左右滑动失效
         this.$nextTick(() => {
           this.navSwiper = new Swiper('.swiper-container', {
@@ -80,20 +91,31 @@ export default {
             freeMode: true
           })
         })
+        // 要在navList加载完成后才能继续，如果在mounted中获取，会出现navlist为空的情况
       })
     },
-    changeIndex (index, e) {
+    changeIndex (index) {
       this.curIndex = index
       let toIndex = 0
       if (index > this.slidesPerView / 2) {
         toIndex = index - this.slidesPerView / 2
       }
       this.navSwiper.slideTo(toIndex, 1000, false)
-      this.getHomePage()
+
+      // 如果pageContent存在index，说明已经请求过，不在加载
+      if (!this.pageContent[index]) {
+        this.getHomePage(index)
+      }
     },
-    getHomePage () {
-      this.$fetch('homePage', {}).then(res => {
-        this.navList[this.curIndex].hasData = true
+    getHomePage (curIndex) {
+      // PageData page_id,page_type
+      let data = {
+        page_id: this.navList[curIndex].page_id,
+        page_type: this.navList[curIndex].page_type
+      }
+      this.$fetch('PageData', data).then(res => {
+        // this.pageContent[curIndex] = res.data.data.data.sections
+        this.$set(this.pageContent, curIndex, res.data.data.data.sections)
       })
     }
   }

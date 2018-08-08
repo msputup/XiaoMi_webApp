@@ -1,10 +1,10 @@
-const host = 'http://rap2api.taobao.org/app/mock/25079'
-
+// const host = 'http://rap2api.taobao.org/app/mock/25079'
+const host = 'http://127.0.0.1:8989'
 const url = {
   login: '/user/login',
   getCode: '/user/getCode',
-  navList: '/home/navList',
-  homePage: '/home/homePage'
+  homeNav: '/home/homeNav',
+  PageData: '/home/pageData'
 }
 
 // 第一种方法
