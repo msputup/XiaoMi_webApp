@@ -141,7 +141,7 @@ export default {
   overflow: hidden;
   width: 100%;
   height: 100%;
-  max-width: 375px;
+  max-width: 750px;
   margin: 0 auto;
 }
 
@@ -156,7 +156,7 @@ export default {
   overflow-y: auto;
   background: #fff;
   color: #3c3c3c;
-  padding-bottom: 52px;
+  padding-bottom: 104px;
 }
 
 .no-scroll::-webkit-scrollbar {
@@ -169,7 +169,7 @@ export default {
   left: 0;
   right: 0;
   z-index: 99;
-  box-shadow: 0 2px 4px -1px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 4px 8px -1px rgba(0, 0, 0, 0.2);
   background: #f2f2f2;
 }
 
@@ -177,7 +177,7 @@ export default {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  height: 50px;
+  height: 100px;
   background: #f2f2f2;
   color: #666;
   padding: 0;
@@ -185,8 +185,8 @@ export default {
 
 .app-header-item {
   display: block;
-  width: 32px;
-  margin: 0 10px;
+  width: 64px;
+  margin: 0 20px;
 }
 
 .app-header-item img {
@@ -206,36 +206,36 @@ export default {
   width: 100%;
   color: rgba(0, 0, 0, 0.3);
   background-color: #fff;
-  border-radius: 2px;
+  border-radius: 4px;
 }
 
 .image-icons {
   display: inline-block;
-  width:31px;
-  height:31px;
+  width:62px;
+  height:62px;
   text-align: center;
-  line-height: 31px;
-  font-size:20px;
+  line-height: 62px;
+  font-size:40px;
 }
 
 .nav {
   /* overflow-x: auto; */
   background: #f2f2f2;
-  font-size:13px;
+  font-size:27px;
   white-space: nowrap;
   z-index: 2;
 }
 
 .nav .nav-item {
   display: inline-block;
-  padding: 0 13px;
+  padding: 0 26px;
   width: auto!important;
 }
 
 .nav .nav-item span{
   display: inline-block;
-  line-height:32px;
-  border-bottom: 2px solid rgba(237,91,0,0);
+  line-height:64px;
+  border-bottom: 4px solid rgba(237,91,0,0);
   color: rgb(116,116,116);
   border-color: rgb(242,242,242);
 }
@@ -254,12 +254,9 @@ export default {
 
 .bodys {
   position: absolute;
-  top: 82px;
+  top: 164px;
   left: 0;
   right: 0;
-  background: rgba(237, 91, 0, 0.1);
-  height: 800px;
-  line-height: 800px;
-  font-size:72px;
+  background: #fff;
 }
 </style>

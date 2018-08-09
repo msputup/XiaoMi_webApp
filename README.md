@@ -1,3 +1,20 @@
+### Todo List
+
+- MiHome 网络卡有时候会白屏一会儿，需要添加一个loading动画
+- components/home/gallery a标签需要添加点击事件
+- img lazy-load
+- nav_tabs 切换动画
+
+
+### 小米nav_tabs点击切换
+小米所有的content内容都放在了一个json里。
+
+然后通过vue组件来判断传递过来的组件类型。-> v-if/v-else-if/v-else
+
+content的style大多数也来自于组件。除了部分固定style。
+
+json的style数值都是px写的。不过因为适配用的vw，然后postcss没找到适配dom上的class的方法，所以需要手动计算
+
 ### 使用vw实现移动端适配
 
 - 安装插件
