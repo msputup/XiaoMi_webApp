@@ -35,3 +35,12 @@ button, input, select, textarea, tt{
 *,:after,:before {
   box-sizing: inherit;
 }
+
+
+.box-flex {
+  display: flex;
+}
+
+.box-flex>*,.box-inline-flex>* {
+  flex: 1 1 auto
+}
