@@ -20,9 +20,8 @@ module.exports = {
       },
       "postcss-viewport-units":{},
       "cssnano": {
-          preset: "advanced",
-          autoprefixer: false,
-          "postcss-zindex": false
+          preset: "default"
+          // advance postcss-zindex：false无效，会导致progress失效。
       }
   }
 }

@@ -1,6 +1,7 @@
 <template>
   <div class="app-shell">
     <div class="app-view-wrapper">
+      <preloading :isShow="showLoading"></preloading>
       <div class="app-view">
         <header class="header">
           <div class="app-header-wrapper">
@@ -21,13 +22,6 @@
               </div>
             </div>
           </div>
-          <!-- 原生写法，绑定点击事件，并根据id切换对应bodys -->
-          <!-- <div class="nav no-scroll">
-            <div class="nav-item" v-for="nav in navList" :key="nav.page_id">
-              <span style="color: rgb(116, 116, 116); border-color: rgb(242, 242, 242);">{{nav.name}}</span>
-            </div>
-          </div> -->
-          <!-- 改用swiper插件 -->
           <div class="nav swiper-container">
             <div class="swiper-wrapper" ref="swipperWrapper">
               <div class="nav-item swiper-slide"
@@ -40,17 +34,15 @@
             </div>
           </div>
         </header>
-        <div class="page-wrap">
-          <div class="bodys" v-for="(nav,index) in navList" :key="index">
-            <!-- <div v-for = '(content, Index) in navList' v-show = 'contentIndex === homeMenuFlag'>
-              <ContentList :content-list = 'homeDataArray[contentIndex]'></ContentList>
-            </div> -->
-            <!-- v-bind:key需要放在真正的html元素上 -->
-            <!-- <template v-for="(nav,index) in navList">
-                <Content :content-list="pageContent[index]"></Content>
-            </template> -->
+        <div class="page-wrap" ref="page">
+          <div class="bodys" v-for="(nav,index) in navList" :key="index" v-show="index == curIndex">
               <component-list-main :sections="pageContent[index]"></component-list-main>
           </div>
+        </div>
+        <div class="fixed-br" v-show="toTop">
+          <a href="javascript:;" id='top' @click="gotoTop">
+            <img src="../assets/images/top.png">
+          </a>
         </div>
       </div>
     </div>
@@ -59,7 +51,9 @@
 
 <script>
 import Swiper from 'swiper'
+import preloading from '../components/other/preloading'
 import componentListMain from '../components/home/componentListMain'
+
 export default {
   data () {
     return {
@@ -67,16 +61,21 @@ export default {
       curIndex: 0,
       navSwiper: null,
       slidesPerView: 6,
-      pageContent: {}
+      pageContent: {},
+      toTop: false,
+      showLoading: false
     }
   },
 
   components: {
-    componentListMain
+    componentListMain, preloading
   },
   // vue生命周期
   created () {
     this.getNavList()
+  },
+  mounted () {
+    window.addEventListener('scroll', this.needToTop, true)
   },
   methods: {
     getNavList () {
@@ -106,6 +105,7 @@ export default {
       if (!this.pageContent[index]) {
         this.getHomePage(index)
       }
+      this.gotoTop()
     },
     getHomePage (curIndex) {
       // PageData page_id,page_type
@@ -113,10 +113,28 @@ export default {
         page_id: this.navList[curIndex].page_id,
         page_type: this.navList[curIndex].page_type
       }
+      this.showLoading = true
       this.$fetch('PageData', data).then(res => {
         // this.pageContent[curIndex] = res.data.data.data.sections
+        // https://cn.vuejs.org/v2/guide/reactivity.html 需要改用Vue.set
         this.$set(this.pageContent, curIndex, res.data.data.data.sections)
+        this.showLoading = false
       })
+    },
+    gotoTop () {
+      let page = this.$refs.page
+      page.scrollTop = 0
+    },
+    needToTop () {
+      // 获取屏幕高度
+      let clientHeight = document.documentElement.clientHeight
+      let page = this.$refs.page
+      let scTop = page.scrollTop
+      if (scTop >= clientHeight) {
+        this.toTop = true
+      } else {
+        this.toTop = false
+      }
     }
   }
 }
@@ -259,4 +277,24 @@ export default {
   right: 0;
   background: #fff;
 }
+
+.fixed-br {
+  position: fixed;
+  z-index: 999;
+  bottom:114px;
+  right:26px;
+}
+
+.fixed-br a {
+  display: block;
+  width: 70px;
+  height: 70px;
+  overflow: hidden;
+  margin-top:10px;
+}
+
+.fixed-br img {
+  width: 100%;
+}
+
 </style>

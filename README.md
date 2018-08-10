@@ -1,9 +1,7 @@
 ### Todo List
 
-- MiHome 网络卡有时候会白屏一会儿，需要添加一个loading动画
 - components/home/gallery a标签需要添加点击事件
 - img lazy-load
-- nav_tabs 切换动画
 - listMerga 应该还可以修改
 
 ### 小米nav_tabs点击切换
