@@ -4,7 +4,7 @@
 - components/home/gallery a标签需要添加点击事件
 - img lazy-load
 - nav_tabs 切换动画
-
+- listMerga 应该还可以修改
 
 ### 小米nav_tabs点击切换
 小米所有的content内容都放在了一个json里。

@@ -8,6 +8,9 @@
       <listMerga v-else-if="list.view_type === 'list_two_type1'" :listBody="list"></listMerga>
       <listMerga v-else-if="list.view_type === 'list_one_type2'" :listBody="list"></listMerga>
       <listMerga v-else-if="list.view_type === 'list_one_type3'" :listBody="list"></listMerga>
+      <listMerga v-else-if="list.view_type === 'list_one_type12'" :listBody="list"></listMerga>
+      <listMerga v-else-if="list.view_type === 'list_one_type14'" :listBody="list"></listMerga>
+      <listMerga v-else-if="list.view_type === 'list_two_type13'" :listBody="list"></listMerga>
       <listActionTitle v-else-if="list.view_type === 'list_action_title'" :body="list.body"></listActionTitle>
     </div>
   </div>
