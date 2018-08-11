@@ -1,53 +1,44 @@
 <template>
-  <div class="app-shell">
-    <div class="app-view-wrapper">
-      <preloading :isShow="showLoading"></preloading>
-      <div class="app-view">
-        <header class="header">
-          <div class="app-header-wrapper">
-            <div class="app-header-left">
-              <div class="app-header-item logo">
-                <img src="../assets/images/homelogo.png" alt="">
-              </div>
-            </div>
-            <div class="app-header-middle">
-              <div class="app-header-title">
-                <i class="iconfont icon-sousuo image-icons"></i>
-                搜索商品名称
-              </div>
-            </div>
-            <div class="app-header-right">
-              <div class="app-header-item">
-                <i class="iconfont icon-flightpeople3 image-icons" @click="toUser"></i>
-              </div>
-            </div>
+  <div class="app-view app-view-with-footer">
+    <preloading :isShow="showLoading"></preloading>
+    <header class="header">
+      <div class="app-header-wrapper">
+        <div class="app-header-left">
+          <div class="app-header-item logo">
+            <img src="../assets/images/homelogo.png" alt="">
           </div>
-          <div class="nav swiper-container">
-            <div class="swiper-wrapper" ref="swipperWrapper">
-              <div class="nav-item swiper-slide"
-                :class="{'nav_active':curIndex == index}"
-                v-for="(nav,index) in navList"
-                :key="index"
-                @click="changeIndex(index)">
-                <span>{{nav.name}}</span>
-              </div>
-            </div>
-          </div>
-        </header>
-        <!-- transition-group 加class会渲染成普通的div，如果不加则不渲染，类似于template，但是ref会失效。 -->
-        <div class="page-wrap" ref="page">
-          <transition-group tag="div" :name="moveAnim">
-            <div class="bodys" v-for="(nav,index) in navList" :key="index" v-show="index == curIndex">
-                <component-list-main :sections="pageContent[index]"></component-list-main>
-            </div>
-          </transition-group>
         </div>
-        <div class="fixed-br" v-show="toTop">
-          <a href="javascript:;" id='top' @click="gotoTop">
-            <img src="../assets/images/top.png">
-          </a>
+        <div class="app-header-middle">
+          <div class="app-header-title">
+            <i class="iconfont icon-sousuo image-icons"></i> 搜索商品名称
+          </div>
+        </div>
+        <div class="app-header-right">
+          <div class="app-header-item">
+            <i class="iconfont icon-flightpeople3 image-icons" @click="toUser"></i>
+          </div>
         </div>
       </div>
+      <div class="nav swiper-container">
+        <div class="swiper-wrapper" ref="swipperWrapper">
+          <div class="nav-item swiper-slide" :class="{'nav_active':curIndex == index}" v-for="(nav,index) in navList" :key="index" @click="changeIndex(index)">
+            <span>{{nav.name}}</span>
+          </div>
+        </div>
+      </div>
+    </header>
+    <!-- transition-group 加class会渲染成普通的div，如果不加则不渲染，类似于template，但是ref会失效。 -->
+    <div class="page-wrap" ref="page">
+      <transition-group tag="div" :name="moveAnim">
+        <div class="bodys" v-for="(nav,index) in navList" :key="index" v-show="index == curIndex">
+          <component-list-main :sections="pageContent[index]"></component-list-main>
+        </div>
+      </transition-group>
+    </div>
+    <div class="fixed-br" v-show="toTop">
+      <a href="javascript:;" id='top' @click="gotoTop">
+        <img src="../assets/images/top.png">
+      </a>
     </div>
   </div>
 </template>
@@ -72,7 +63,8 @@ export default {
   },
 
   components: {
-    componentListMain, preloading
+    componentListMain,
+    preloading
   },
   // vue生命周期
   created () {
@@ -146,153 +138,141 @@ export default {
 </script>
 
 <style scoped>
-.app-shell {
-  position: absolute;
-  top: 0;
-  right: 0;
-  left: 0;
-  bottom: 0;
-  width: 100%;
-  height: 100%;
-  z-index: 1;
-}
+  .app-view {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    height: 100%;
+    overflow-x: hidden;
+    overflow-y: auto;
+    background: #fff;
+    color: #3c3c3c;
+  }
 
-.app-view-wrapper {
-  position: relative;
-  overflow: hidden;
-  width: 100%;
-  height: 100%;
-  max-width: 750px;
-  margin: 0 auto;
-}
+  .no-scroll::-webkit-scrollbar {
+    width: 0;
+    height: 0;
+  }
 
-.app-view {
-  position: absolute;
-  top: 0;
-  right: 0;
-  bottom: 0;
-  left: 0;
-  height: 100%;
-  overflow-x: hidden;
-  overflow-y: auto;
-  background: #fff;
-  color: #3c3c3c;
-  padding-bottom: 104px;
-}
+  .header {
+    position: fixed;
+    top: -1px;
+    left: 0;
+    right: 0;
+    z-index: 99;
+    box-shadow: 0 4px 8px -1px rgba(0, 0, 0, 0.2);
+    background: #f2f2f2;
+  }
 
-.no-scroll::-webkit-scrollbar {
-  width:0;
-  height: 0;
-}
-.header {
-  position: fixed;
-  top: -1px;
-  left: 0;
-  right: 0;
-  z-index: 99;
-  box-shadow: 0 4px 8px -1px rgba(0, 0, 0, 0.2);
-  background: #f2f2f2;
-}
+  .app-header-item img {
+    width: 80%;
+  }
 
-.app-header-item img {
-  width: 80%;
-}
+  .app-header-title {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    border: 1px solid #e5e5e5;
+    text-align: left;
+    width: 100%;
+    color: rgba(0, 0, 0, 0.3);
+    background-color: #fff;
+    border-radius: 4px;
+  }
 
-.app-header-title {
-  display: flex;
-  justify-content: flex-start;
-  align-items: center;
-  border: 1px solid #e5e5e5;
-  text-align: left;
-  width: 100%;
-  color: rgba(0, 0, 0, 0.3);
-  background-color: #fff;
-  border-radius: 4px;
-}
+  .image-icons {
+    display: inline-block;
+    width: 62px;
+    height: 62px;
+    text-align: center;
+    line-height: 62px;
+    font-size: 40px;
+  }
 
-.image-icons {
-  display: inline-block;
-  width:62px;
-  height:62px;
-  text-align: center;
-  line-height: 62px;
-  font-size:40px;
-}
+  .nav {
+    /* overflow-x: auto; */
+    background: #f2f2f2;
+    font-size: 27px;
+    white-space: nowrap;
+    z-index: 2;
+  }
 
-.nav {
-  /* overflow-x: auto; */
-  background: #f2f2f2;
-  font-size:27px;
-  white-space: nowrap;
-  z-index: 2;
-}
+  .nav .nav-item {
+    display: inline-block;
+    padding: 0 26px;
+    width: auto!important;
+  }
 
-.nav .nav-item {
-  display: inline-block;
-  padding: 0 26px;
-  width: auto!important;
-}
+  .nav .nav-item span {
+    display: inline-block;
+    line-height: 64px;
+    border-bottom: 4px solid rgba(237, 91, 0, 0);
+    color: rgb(116, 116, 116);
+    border-color: rgb(242, 242, 242);
+  }
 
-.nav .nav-item span{
-  display: inline-block;
-  line-height:64px;
-  border-bottom: 4px solid rgba(237,91,0,0);
-  color: rgb(116,116,116);
-  border-color: rgb(242,242,242);
-}
+  .nav .nav-item.nav_active span {
+    color: rgb(237, 91, 0);
+    border-color: rgb(237, 91, 0);
+  }
 
-.nav .nav-item.nav_active span {
-  color: rgb(237,91,0);
-  border-color: rgb(237,91,0);
-}
+  .page-wrap {
+    position: relative;
+    height: 100%;
+    overflow-x: hidden;
+    overflow-y: auto;
+  }
 
-.page-wrap {
-  position: relative;
-  height: 100%;
-  overflow-x:hidden;
-  overflow-y:auto;
-}
+  .bodys {
+    position: absolute;
+    top: 164px;
+    left: 0;
+    right: 0;
+    background: #fff;
+  }
 
-.bodys {
-  position: absolute;
-  top: 164px;
-  left: 0;
-  right: 0;
-  background: #fff;
-}
+  .fixed-br {
+    position: fixed;
+    z-index: 999;
+    bottom: 114px;
+    right: 26px;
+  }
 
-.fixed-br {
-  position: fixed;
-  z-index: 999;
-  bottom:114px;
-  right:26px;
-}
+  .fixed-br a {
+    display: block;
+    width: 70px;
+    height: 70px;
+    overflow: hidden;
+    margin-top: 10px;
+  }
 
-.fixed-br a {
-  display: block;
-  width: 70px;
-  height: 70px;
-  overflow: hidden;
-  margin-top:10px;
-}
+  .fixed-br img {
+    width: 100%;
+  }
 
-.fixed-br img {
-  width: 100%;
-}
+  .bodys-left-enter,
+  .bodys-right-leave-to {
+    transform: translateX(100%);
+  }
 
-.bodys-left-enter, .bodys-right-leave-to {
-  transform: translateX(100%);
-}
+  .bodys-left-enter-active,
+  .bodys-left-leave-active,
+  .bodys-right-enter-active,
+  .bodys-right-leave-active {
+    transition: all .4s ease-out .2s;
+  }
 
-.bodys-left-enter-active, .bodys-left-leave-active, .bodys-right-enter-active, .bodys-right-leave-active {
-  transition: all .4s ease-out .2s;
-}
+  .bodys-left-enter-to,
+  .bodys-left-leave,
+  .bodys-right-enter-to,
+  .bodys-right-leave {
+    transform: translateX(0);
+  }
 
-.bodys-left-enter-to, .bodys-left-leave, .bodys-right-enter-to, .bodys-right-leave {
-  transform: translateX(0);
-}
-
-.bodys-left-leave-to, .bodys-right-enter {
-  transform: translateX(-100%);
-}
+  .bodys-left-leave-to,
+  .bodys-right-enter {
+    transform: translateX(-100%);
+  }
 </style>

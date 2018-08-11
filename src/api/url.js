@@ -4,7 +4,8 @@ const url = {
   login: '/user/login',
   getCode: '/user/getCode',
   homeNav: '/home/homeNav',
-  PageData: '/home/pageData'
+  PageData: '/home/pageData',
+  category: '/category/index'
 }
 
 // 第一种方法
