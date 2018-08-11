@@ -1,0 +1,32 @@
+/* header */
+.app-header-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 100px;
+  background: #f2f2f2;
+  color: #666;
+  padding: 0;
+}
+.app-header-wrapper>div {
+  display: flex;
+  align-items: center;
+}
+.app-header-item {
+  display: block;
+  width: 64px;
+  margin: 0 20px;
+}
+.app-header-middle {
+  flex: 1;
+  text-align: center;
+}
+
+/* box-flex */
+.box-flex {
+  display: flex;
+}
+
+.box-flex>*,.box-inline-flex>* {
+  flex: 1 1 auto
+}

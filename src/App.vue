@@ -1,22 +1,41 @@
 <template>
   <div id="app">
-    <router-view/>
+    <transition :name="routerAnim">
+      <router-view/>
+    </transition>
+    <miFooter />
   </div>
 </template>
 
 <script>
+import miFooter from './components/MiFooter'
 export default {
-  name: 'App'
+  data () {
+    return {
+      routerAnim: ''
+    }
+  },
+  components: {
+    miFooter
+  },
+  watch: {
+    '$route' (to, from) {
+      if (to.name !== 'home') {
+        this.routerAnim = 'router'
+      }
+    }
+  }
 }
 </script>
 
 <style>
-/* #app {
-  font-family: 'Avenir', Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
-} */
+.router-enter-active,.router-leave-active {
+  transition: transform .3s ease-out;
+}
+.router-enter,.router-leave-to {
+  transform: translate3d(100%,0,0)
+}
+.router-active {
+  transform: translateZ(0)
+}
 </style>

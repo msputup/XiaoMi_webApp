@@ -37,10 +37,4 @@ button, input, select, textarea, tt{
 }
 
 
-.box-flex {
-  display: flex;
-}
 
-.box-flex>*,.box-inline-flex>* {
-  flex: 1 1 auto
-}

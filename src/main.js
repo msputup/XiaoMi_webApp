@@ -7,6 +7,8 @@ import fetch from '@/api/'
 
 import 'normalize.css'
 import './assets/css/reset.css'
+import './assets/css/common.css'
+import './assets/fonts/iconfont.css'
 
 Vue.prototype.$fetch = fetch
 Vue.config.productionTip = false

@@ -18,7 +18,7 @@
             </div>
             <div class="app-header-right">
               <div class="app-header-item">
-                <i class="iconfont icon-flightpeople3 image-icons"></i>
+                <i class="iconfont icon-flightpeople3 image-icons" @click="toUser"></i>
               </div>
             </div>
           </div>
@@ -34,10 +34,13 @@
             </div>
           </div>
         </header>
+        <!-- transition-group 加class会渲染成普通的div，如果不加则不渲染，类似于template，但是ref会失效。 -->
         <div class="page-wrap" ref="page">
-          <div class="bodys" v-for="(nav,index) in navList" :key="index" v-show="index == curIndex">
-              <component-list-main :sections="pageContent[index]"></component-list-main>
-          </div>
+          <transition-group tag="div" :name="moveAnim">
+            <div class="bodys" v-for="(nav,index) in navList" :key="index" v-show="index == curIndex">
+                <component-list-main :sections="pageContent[index]"></component-list-main>
+            </div>
+          </transition-group>
         </div>
         <div class="fixed-br" v-show="toTop">
           <a href="javascript:;" id='top' @click="gotoTop">
@@ -63,7 +66,8 @@ export default {
       slidesPerView: 6,
       pageContent: {},
       toTop: false,
-      showLoading: false
+      showLoading: false,
+      moveAnim: ''
     }
   },
 
@@ -79,21 +83,19 @@ export default {
   },
   methods: {
     getNavList () {
-      // bugs : 刷新会闪空白，需要加个loading
       this.$fetch('homeNav').then(res => {
         this.navList = res.data.data.tabs
         this.getHomePage(this.curIndex)
-        // 不在mounted中是因为，数据没有加载完成，swiper就初始化完成了， 会导致左右滑动失效
         this.$nextTick(() => {
           this.navSwiper = new Swiper('.swiper-container', {
             slidesPerView: this.slidesPerView,
             freeMode: true
           })
         })
-        // 要在navList加载完成后才能继续，如果在mounted中获取，会出现navlist为空的情况
       })
     },
     changeIndex (index) {
+      this.moveAnim = index > this.curIndex ? 'bodys-left' : 'bodys-right'
       this.curIndex = index
       let toIndex = 0
       if (index > this.slidesPerView / 2) {
@@ -135,14 +137,15 @@ export default {
       } else {
         this.toTop = false
       }
+    },
+    toUser () {
+      this.$router.push('user')
     }
   }
 }
 </script>
 
 <style scoped>
-@import url("../assets/fonts/iconfont.css");
-
 .app-shell {
   position: absolute;
   top: 0;
@@ -191,28 +194,8 @@ export default {
   background: #f2f2f2;
 }
 
-.app-header-wrapper {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  height: 100px;
-  background: #f2f2f2;
-  color: #666;
-  padding: 0;
-}
-
-.app-header-item {
-  display: block;
-  width: 64px;
-  margin: 0 20px;
-}
-
 .app-header-item img {
   width: 80%;
-}
-
-.app-header-middle {
-  flex: 1;
 }
 
 .app-header-title {
@@ -297,4 +280,19 @@ export default {
   width: 100%;
 }
 
+.bodys-left-enter, .bodys-right-leave-to {
+  transform: translateX(100%);
+}
+
+.bodys-left-enter-active, .bodys-left-leave-active, .bodys-right-enter-active, .bodys-right-leave-active {
+  transition: all .4s ease-out .2s;
+}
+
+.bodys-left-enter-to, .bodys-left-leave, .bodys-right-enter-to, .bodys-right-leave {
+  transform: translateX(0);
+}
+
+.bodys-left-leave-to, .bodys-right-enter {
+  transform: translateX(-100%);
+}
 </style>

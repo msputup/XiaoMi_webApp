@@ -206,8 +206,6 @@ export default {
 </script>
 
 <style scoped>
-@import url("../assets/fonts/iconfont.css");
-
 .wrap {
   height: auto;
   min-height: 100%;
