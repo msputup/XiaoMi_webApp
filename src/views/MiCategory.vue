@@ -2,7 +2,7 @@
   <div class="app-view app-view-with-header app-view-width-footer">
     <div class="list-nav">
       <ul>
-        <li v-for="(li,index) in categoryList" :key="index" :class="index==curIndex?'active' : ''" @click="changeIndex(index)">
+        <li v-for="(li,index) in categoryList" :key="index" :class="index==curIndex?'active' : ''" @click="changeIndex(index)" :ref="`li_${index}`">
           <a>
             <span>{{li.category_name}}</span>
           </a>
@@ -11,25 +11,46 @@
     </div>
     <div class="list-wrap" @scroll="listwrapScroll">
       <div class="list-item" v-for="(li,index) in categoryList" :key="index" :ref="`category_${index}`">
-        <component-list-main :sections="li.category_list"></component-list-main>
+        <!-- <component-list-main :sections="li.category_list"></component-list-main> -->
+        <div class ='component-list-main'>
+          <div v-for="(list,index) in li.category_list" :key="index">
+            <cellsAutoFill v-if="list.view_type === 'cells_auto_fill'" :body="list.body"></cellsAutoFill>
+            <div v-else-if="list.view_type === 'category_title'" :class="list.view_type" class="ignore">
+              <span>{{list.body.category_name}}</span>
+            </div>
+            <div v-else-if="list.view_type === 'category_group'" :class="list.view_type" class="box-flex">
+              <div class="box">
+                <div class="product" v-for="(item,index) in list.body.items" :key="index">
+                  <a>
+                    <div class="img">
+                      <img :src="item.img_url">
+                    </div>
+                    <div class="name">{{item.product_name}}</div>
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   </div>
 </template>
 
 <script>
-import componentListMain from '../components/home/componentListMain'
+import cellsAutoFill from '../components/home/cellsAutoFill'
 export default {
   data () {
     return {
       categoryList: null,
       curIndex: 0,
-      offsetTop: [],
+      wrapOffsetTop: [],
+      liOffsetTop: [],
       scrollTimer: null
     }
   },
   components: {
-    componentListMain
+    cellsAutoFill
   },
   created () {
     this.getList()
@@ -40,17 +61,28 @@ export default {
         this.categoryList = res.data.data
         this.$nextTick(() => {
           this.categoryList.forEach((item, index) => {
-            this.offsetTop.push(this.$refs['category_' + index][0].offsetTop)
+            this.wrapOffsetTop.push(this.$refs['category_' + index][0].offsetTop)
+            this.liOffsetTop.push(this.$refs['li_' + index][0].offsetTop)
           })
         })
       })
     },
     changeIndex (index) {
       this.curIndex = index
-      let top = this.offsetTop[index]
+      this.navliScrollTop(index)
+      let top = this.wrapOffsetTop[index]
       let listWrap = document.querySelector('.list-wrap')
       listWrap.scrollTo(0, top)
       listWrap.removeEventListener('scroll', this.scrollHandler)
+    },
+    navliScrollTop (index) {
+      let navul = document.querySelector('.list-nav ul')
+      let navli = navul.querySelectorAll('li')
+      if (navul.scrollHeight > navul.clientHeight) {
+        console.log(index)
+        console.log(navli.length)
+        navul.scrollTop = navul.scrollHeight - navul.clientHeight - navli[index].clientHeight * (navli.length - 1 - index)
+      }
     },
     listwrapScroll () {
       document.querySelector('.list-wrap').addEventListener('scroll', this.scrollHandler)
@@ -58,11 +90,13 @@ export default {
     scrollHandler () {
       clearTimeout(this.scrollTimer)
       this.scrollTimer = setTimeout(() => {
-        let scrollTop = document.querySelector('.list-wrap').scrollTop
-        let length = this.offsetTop.length
+        let wrapScrollTop = document.querySelector('.list-wrap').scrollTop
+        let listItem = document.querySelectorAll('.list-wrap .list-item')
+        let length = this.wrapOffsetTop.length
         for (let index = 0; index < length; index++) {
-          if (scrollTop >= this.offsetTop[index] && scrollTop < this.offsetTop[index + 1]) {
-            this.curIndex = index
+          if (wrapScrollTop >= (listItem[index].offsetTop + listItem[index].clientHeight) && wrapScrollTop < (listItem[index + 1].offsetTop + listItem[index + 1].clientHeight)) {
+            this.curIndex = index + 1
+            this.navliScrollTop(this.curIndex)
             break
           }
         }

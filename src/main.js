@@ -4,12 +4,14 @@ import Vue from 'vue'
 import App from './App'
 import router from './router'
 import fetch from '@/api/'
+import lazyload from 'vue-lazyload'
 
 import 'normalize.css'
 import './assets/css/reset.css'
 import './assets/css/common.css'
 import './assets/fonts/iconfont.css'
 
+Vue.use(lazyload)
 Vue.prototype.$fetch = fetch
 Vue.config.productionTip = false
 

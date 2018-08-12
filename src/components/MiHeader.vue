@@ -2,7 +2,7 @@
   <header class="app-header-wrapper app-shell-header" v-show="isShow">
     <div class="app-header-left">
       <a class="app-header-item">
-        <i class="iconfont icon-back"></i>
+        <i class="iconfont icon-back" @click="back"></i>
       </a>
     </div>
     <div class="app-header-middle">
@@ -45,6 +45,11 @@ export default {
         default:
           return '我的'
       }
+    }
+  },
+  methods: {
+    back () {
+      this.$router.go(-1)
     }
   }
   // computed: {
