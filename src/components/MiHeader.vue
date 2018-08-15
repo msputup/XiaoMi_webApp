@@ -20,7 +20,7 @@
 export default {
   data () {
     return {
-      showHeader: ['category', 'cart'],
+      showHeader: ['category', 'cart', 'productList'],
       isShow: false
     }
   },
@@ -42,6 +42,8 @@ export default {
           return '分类'
         case 'cart':
           return '购物车'
+        case 'productList':
+          return '商品列表'
         default:
           return '我的'
       }

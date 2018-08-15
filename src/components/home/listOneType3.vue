@@ -7,7 +7,7 @@
         <div class="price mt32">{{item.product_price}}</div>
       </div>
       <div class="img">
-        <img :src="item.img_url">
+        <img v-lazy="item.img_url">
       </div>
     </a>
   </div>

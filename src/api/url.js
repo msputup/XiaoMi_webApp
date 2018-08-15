@@ -5,7 +5,11 @@ const url = {
   getCode: '/user/getCode',
   homeNav: '/home/homeNav',
   PageData: '/home/pageData',
-  category: '/category/index'
+  category: '/category/index',
+  productList: '/product/productList',
+  productView: '/product/productview',
+  recommend: '/cart/recommendBlank',
+  productRecommend: '/product/recommend'
 }
 
 // 第一种方法

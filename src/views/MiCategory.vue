@@ -21,9 +21,9 @@
             <div v-else-if="list.view_type === 'category_group'" :class="list.view_type" class="box-flex">
               <div class="box">
                 <div class="product" v-for="(item,index) in list.body.items" :key="index">
-                  <a>
+                  <a @click="getRoute(item.action.type, item.action.path)">
                     <div class="img">
-                      <img :src="item.img_url">
+                      <img v-lazy="item.img_url">
                     </div>
                     <div class="name">{{item.product_name}}</div>
                   </a>
@@ -39,6 +39,8 @@
 
 <script>
 import cellsAutoFill from '../components/home/cellsAutoFill'
+import fetch from '@/api/'
+import routerParse from '@/router/routerParse'
 export default {
   data () {
     return {
@@ -49,21 +51,33 @@ export default {
       scrollTimer: null
     }
   },
+  beforeRouteEnter (to, from, next) {
+    if (from.name) {
+      fetch('category').then(res => {
+        next(vm => vm.setList(res))
+      })
+    } else {
+      next(vm => vm.getList())
+    }
+  },
   components: {
     cellsAutoFill
   },
-  created () {
-    this.getList()
-  },
+  // created () {
+  //   this.getList()
+  // },
   methods: {
     getList () {
       this.$fetch('category').then(res => {
-        this.categoryList = res.data.data
-        this.$nextTick(() => {
-          this.categoryList.forEach((item, index) => {
-            this.wrapOffsetTop.push(this.$refs['category_' + index][0].offsetTop)
-            this.liOffsetTop.push(this.$refs['li_' + index][0].offsetTop)
-          })
+        this.setList(res)
+      })
+    },
+    setList (res) {
+      this.categoryList = res.data.data
+      this.$nextTick(() => {
+        this.categoryList.forEach((item, index) => {
+          this.wrapOffsetTop.push(this.$refs['category_' + index][0].offsetTop)
+          this.liOffsetTop.push(this.$refs['li_' + index][0].offsetTop)
         })
       })
     },
@@ -79,8 +93,6 @@ export default {
       let navul = document.querySelector('.list-nav ul')
       let navli = navul.querySelectorAll('li')
       if (navul.scrollHeight > navul.clientHeight) {
-        console.log(index)
-        console.log(navli.length)
         navul.scrollTop = navul.scrollHeight - navul.clientHeight - navli[index].clientHeight * (navli.length - 1 - index)
       }
     },
@@ -101,6 +113,9 @@ export default {
           }
         }
       }, 100)
+    },
+    getRoute (type, path) {
+      routerParse.call(this, type, path)
     }
   }
 }
@@ -170,6 +185,81 @@ export default {
     bottom: 104px;
     padding: 16px 32px;
     overflow: auto;
+  }
+
+  .category_title {
+    background: #fff;
+    font-size: 28px;
+    text-align: center;
+    font-weight: 400;
+    margin-top: 20px;
+    height: 128px;
+    line-height: 128px;
+    overflow: hidden;
+  }
+
+  .category_title span {
+    position: relative;
+  }
+
+  /* bug 不用ignore的话会有warning，提示postcss插件会覆盖content */
+  .ignore span:after, .ignore span:before {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 0;
+    width: 30px;
+    border-top: 1px solid #e0e0e0;
+    transform: translate3d(-150%,-50%,0);
+  }
+
+  .ignore span:after {
+    left: auto;
+    right: 0;
+    transform: translate3d(150%,-50%,0);
+  }
+
+  .category_group {
+    background: #fff;
+    margin: -6px 0 0;
+  }
+
+  .category_group .box {
+    width: 100%;
+    overflow: hidden;
+  }
+
+  .category_group .product {
+    float: left;
+    width: 33.3%;
+    text-align: center;
+    margin-top: 20px;
+    margin-bottom: 30px;
+    overflow: hidden;
+  }
+
+  .category_group .img {
+    width:100px;
+    height: 100px;
+    margin: 0 auto;
+    background: #fff;
+    overflow: hidden;
+  }
+
+  .category_group img {
+    width: auto;
+    height: 100%;
+  }
+
+  .category_group .name {
+    margin-top: 28px;
+    white-space: nowrap;
+    font-size: 23px;
+    color: rgba(0,0,0,.54);
+  }
+
+  .app-view .list-wrap>div:last-child {
+    min-height: calc(100vh - 200px);
   }
 
 </style>

@@ -3,12 +3,12 @@
     <a href="#" :class="[needFlex2? 'box-flex' : '']" v-for="(item,index) in listBody.body.items" :key="index">
       <template v-if="listBody.view_type != 'list_one_type3'">
         <div class="img">
-          <img :src="item.img_url" :style=[imgStyle]>
+          <img v-lazy="item.img_url" :style=[imgStyle]>
           <div class="tag" v-if="item.product_tag">
-            <img :src="item.product_tag" alt="">
+            <img v-lazy="item.product_tag" alt="">
           </div>
           <div class="tag2" v-if="item.product_tag_array">
-            <img :src="item.product_tag_array[0]" alt="">
+            <img v-lazy="item.product_tag_array[0]" alt="">
           </div>
         </div>
       </template>
@@ -39,8 +39,8 @@
       </div>
       <template v-if="listBody.view_type == 'list_one_type3'">
         <div class="img">
-          <img :src="item.img_url" width="100%" height="100%">
-          <div class="tag" v-if="item.product_tag"><img :src="item.product_tag" alt=""></div>
+          <img v-lazy="item.img_url" width="100%" height="100%">
+          <div class="tag" v-if="item.product_tag"><img v-lazy="item.product_tag" alt=""></div>
         </div>
       </template>
     </a>

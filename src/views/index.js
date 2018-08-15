@@ -3,7 +3,8 @@ const MiHome = () => import('./MiHome.vue')
 const MiCategory = () => import('./MiCategory.vue')
 const MiCart = () => import('./MiCart.vue')
 const MiUser = () => import('./MiUser.vue')
-
+const ProductList = () => import('./ProductList.vue')
+const ProductDetail = () => import('./ProductDetail.vue')
 export default [
   {
     path: '/',
@@ -29,5 +30,15 @@ export default [
     path: '/login',
     name: 'login',
     component: MiLogin
+  },
+  {
+    path: '/commodity/list/:id',
+    name: 'productList',
+    component: ProductList
+  },
+  {
+    path: '/commodity/detail/:id',
+    name: 'ProductDetail',
+    component: ProductDetail
   }
 ]

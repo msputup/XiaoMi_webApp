@@ -66,12 +66,14 @@ export default {
     componentListMain,
     preloading
   },
-  // vue生命周期
   created () {
     this.getNavList()
   },
   mounted () {
     window.addEventListener('scroll', this.needToTop, true)
+  },
+  destroyed () {
+    window.removeEventListener('scroll', this.needToTop, true)
   },
   methods: {
     getNavList () {

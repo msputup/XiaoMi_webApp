@@ -2,7 +2,7 @@
   <div class="list_one_type2">
     <a href="#" class="box-flex" v-for="(item,index) in body.items" :key="index">
       <div class="img">
-        <img :src="item.img_url">
+        <img v-lazy="item.img_url">
       </div>
       <div class="info">
         <div class="name">{{item.product_name}}</div>

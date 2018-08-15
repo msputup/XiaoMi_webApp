@@ -51,7 +51,8 @@ export default {
 
 .app-view-wrapper {
   position: relative;
-  overflow: hidden;
+  /* overflow: hidden; */
+  overflow: auto;
   width: 100%;
   height: 100%;
   max-width: 750px;

@@ -2,8 +2,8 @@
   <div class="list_two_type1 box-flex">
     <a href="#" v-for="(item,index) in body.items" :key="index">
       <div class="img">
-        <img :src="item.img_url" width="100%" height="100%">
-        <div class="tag" v-if="item.product_tag"><img :src="item.product_tag" alt=""></div>
+        <img v-lazy="item.img_url" width="100%" height="100%">
+        <div class="tag" v-if="item.product_tag"><img v-lazy="item.product_tag" alt=""></div>
       </div>
       <div class="info">
         <div class="name">{{item.product_name}}</div>
